@@ -1,7 +1,6 @@
-from app.models import db, Recipe,environment, RecipeIngredient, SCHEMA
+from app.models import db, Recipe, RecipeType, environment, SCHEMA
 from datetime import datetime, timezone
 from sqlalchemy.sql import text
-
 
 def seed_recipes():
     recipe1 = Recipe(
@@ -10,7 +9,9 @@ def seed_recipes():
         instructions="1. Preheat oven to 350°F.\n2. Mix the dry ingredients.\n3. Combine wet ingredients and mix with dry. \n4. Bake for 30 minutes.",
         nutritional_info={"calories": 350, "protein": 4, "fat": 12, "carbohydrates": 58},
         cuisine="American",
-        user_id=1
+        user_id=1,
+        ratings=4.8,
+        type=RecipeType.DESSERT
     )
 
     recipe2 = Recipe(
@@ -19,7 +20,9 @@ def seed_recipes():
         instructions="1. Grill the chicken.\n2. Toss the lettuce with Caesar dressing and croutons.\n3. Slice chicken and serve on top.",
         nutritional_info={"calories": 480, "protein": 35, "fat": 30, "carbohydrates": 12},
         cuisine="Italian",
-        user_id=1
+        user_id=1,
+        ratings=4.5,
+        type=RecipeType.LUNCH
     )
 
     recipe3 = Recipe(
@@ -28,7 +31,9 @@ def seed_recipes():
         instructions="1. Heat oil in a pan.\n2. Stir-fry the vegetables for 5-7 minutes.\n3. Add soy sauce and serve with rice.",
         nutritional_info={"calories": 250, "protein": 5, "fat": 10, "carbohydrates": 30},
         cuisine="Chinese",
-        user_id=2
+        user_id=2,
+        ratings=4.7,
+        type=RecipeType.ENTREE
     )
 
     recipe4 = Recipe(
@@ -37,7 +42,9 @@ def seed_recipes():
         instructions="1. Cook spaghetti.\n2. Mix eggs and cheese.\n3. Fry pancetta and combine with pasta and sauce.",
         nutritional_info={"calories": 400, "protein": 15, "fat": 18, "carbohydrates": 50},
         cuisine="Italian",
-        user_id=2
+        user_id=2,
+        ratings=4.9,
+        type=RecipeType.ENTREE
     )
 
     recipe5 = Recipe(
@@ -46,7 +53,9 @@ def seed_recipes():
         instructions="1. Preheat oven to 375°F.\n2. Mix dry and wet ingredients separately.\n3. Combine and fold in blueberries.\n4. Bake for 20 minutes.",
         nutritional_info={"calories": 280, "protein": 4, "fat": 12, "carbohydrates": 40},
         cuisine="American",
-        user_id=3
+        user_id=3,
+        ratings=4.4,
+        type=RecipeType.SNACK
     )
 
     recipe6 = Recipe(
@@ -55,7 +64,9 @@ def seed_recipes():
         instructions="1. Cook the beef with taco seasoning.\n2. Assemble tacos with toppings.\n3. Serve with salsa.",
         nutritional_info={"calories": 300, "protein": 20, "fat": 12, "carbohydrates": 25},
         cuisine="Mexican",
-        user_id=3
+        user_id=3,
+        ratings=4.6,
+        type=RecipeType.ENTREE
     )
 
     recipe7 = Recipe(
@@ -64,7 +75,9 @@ def seed_recipes():
         instructions="1. Heat butter in a skillet.\n2. Sauté garlic and shrimp for 5-7 minutes.\n3. Serve with lemon slices.",
         nutritional_info={"calories": 200, "protein": 24, "fat": 10, "carbohydrates": 3},
         cuisine="American",
-        user_id=1
+        user_id=1,
+        ratings=4.7,
+        type=RecipeType.ENTREE
     )
 
     recipe8 = Recipe(
@@ -73,7 +86,9 @@ def seed_recipes():
         instructions="1. Cook lentils in broth.\n2. Add vegetables and simmer for 20 minutes.\n3. Season and serve hot.",
         nutritional_info={"calories": 180, "protein": 12, "fat": 4, "carbohydrates": 30},
         cuisine="Middle Eastern",
-        user_id=1
+        user_id=1,
+        ratings=4.8,
+        type=RecipeType.LUNCH
     )
 
     recipe9 = Recipe(
@@ -82,7 +97,9 @@ def seed_recipes():
         instructions="1. Roll out pizza dough.\n2. Spread tomato sauce and top with cheese and basil.\n3. Bake at 475°F for 12-15 minutes.",
         nutritional_info={"calories": 320, "protein": 15, "fat": 12, "carbohydrates": 40},
         cuisine="Italian",
-        user_id=2
+        user_id=2,
+        ratings=4.9,
+        type=RecipeType.ENTREE
     )
 
     recipe10 = Recipe(
@@ -91,7 +108,9 @@ def seed_recipes():
         instructions="1. Preheat oven to 350°F.\n2. Cream butter and sugar.\n3. Add oats, flour, raisins, and mix. \n4. Bake for 12-15 minutes.",
         nutritional_info={"calories": 220, "protein": 3, "fat": 8, "carbohydrates": 35},
         cuisine="American",
-        user_id=3
+        user_id=3,
+        ratings=4.2,
+        type=RecipeType.DESSERT
     )
 
     db.session.add_all([recipe1, recipe2, recipe3, recipe4, recipe5, recipe6, recipe7, recipe8, recipe9, recipe10])
