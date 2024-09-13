@@ -6,6 +6,7 @@ import { ModalProvider, Modal } from './context/Modal';
 import Navigation from './components/Navigation/Navigation';
 import Splash from "./pages/Splash";
 import RecipeTypePage from "./pages/RecipeTypePage";
+import RecipePage from "./pages/RecipePage";
 
 const Layout = () => {
   const dispatch = useDispatch();
@@ -38,8 +39,12 @@ const router = createBrowserRouter([
         element: <Splash />,
       },
       {
-        path: '/recipes/:recipeType',
+        path: '/recipes/types/:recipeType',
         element: <RecipeTypePage />,
+      },
+      {
+        path: '/recipes/:recipeId',
+        element: <RecipePage />,
       },
     ],
   },

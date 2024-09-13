@@ -17,7 +17,7 @@ const getRecipeDetails = (recipe) => ({
 
 // Thunks
 export const getRecipesType = (recipeType) => async (dispatch) => {
-    const response = await fetch(`/api/recipes/${recipeType}`);
+    const response = await fetch(`/api/recipes/type/${recipeType}`);
     if (response.ok) {
         const allRecipes = await response.json();
         dispatch(getRecipeByType(allRecipes.recipes));

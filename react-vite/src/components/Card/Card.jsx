@@ -4,7 +4,7 @@ function Card({ id, name, src, rating }) {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/api/recipes/${id}`);
+        navigate(`/recipes/${id}`);
     };
 
 
