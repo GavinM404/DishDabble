@@ -7,6 +7,9 @@ import Navigation from './components/Navigation/Navigation';
 import Splash from "./pages/Splash";
 import RecipeTypePage from "./pages/RecipeTypePage";
 import RecipePage from "./pages/RecipePage";
+import CreateRecipeForm from "./pages/CreateRecipeForm";
+import UserRecipes from "./pages/UserRecipes";
+import UpdateRecipeForm from "./pages/UpdateRecipeForm";
 
 const Layout = () => {
   const dispatch = useDispatch();
@@ -46,6 +49,18 @@ const router = createBrowserRouter([
         path: '/recipes/:recipeId',
         element: <RecipePage />,
       },
+      {
+        path: '/recipes/new',
+        element: <CreateRecipeForm />,
+      },
+      {
+        path: '/recipes/personal',
+        element: <UserRecipes />
+      },
+      {
+        path: '/recipes/:recipeId/edit',
+        element: <UpdateRecipeForm />
+      }
     ],
   },
 ]);

@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
-from app.models import db, Recipe, RecipeType
+from app.models import db, Recipe, RecipeType, RecipeIngredient
+from datetime import datetime, timezone
 
 recipe_routes = Blueprint('recipes', __name__)
 
@@ -25,25 +26,66 @@ def create_recipe():
     # Validate request body
     name = data.get('name')
     description = data.get('description')
-    ingredients = data.get('ingredients')
     instructions = data.get('instructions')
+    ingredients = data.get('ingredients', [])
+    type = data.get('type')
+    cook_time = data.get('cook_time')
+    prep_time = data.get('prep_time')
+    user_id = current_user.id
 
-    if not name or not ingredients or not instructions:
-        return jsonify({"message": "Bad Request", "errors": {"Required Fields": "Name, ingredients, and instructions are required"}}), 400
+    # Additional fields
+    nutritional_info = data.get('nutritional_info')
+    cuisine = data.get('cuisine')
 
-    new_recipe = Recipe(
-        user_id=current_user.id,
-        name=name,
-        description=description,
-        ingredients=ingredients,
-        instructions=instructions
-    )
+    # Check for required fields
+    if not name or not instructions or not type or not ingredients:
+        return jsonify({"message": "Bad Request", "errors": {"Required Fields": "Name, type, ingredients, and instructions are required"}}), 400
 
-    db.session.add(new_recipe)
-    db.session.commit()
+    try:
+        # Create the new recipe
+        new_recipe = Recipe(
+            user_id=user_id,
+            name=name,
+            description=description,
+            instructions=instructions,
+            nutritional_info=nutritional_info,
+            cuisine=cuisine,
+            type=RecipeType(type),  # Convert type to RecipeType Enum
+            cook_time=cook_time,
+            prep_time=prep_time
+        )
 
-    return jsonify(new_recipe.to_dict()), 201
+        # Add and commit the new recipe to get an ID for it
+        db.session.add(new_recipe)
+        db.session.flush()  # Get the ID before committing
 
+        # Add ingredients if provided
+        for ingredient in ingredients:
+            ingredient_name = ingredient.get('ingredient_name')
+            quantity = ingredient.get('quantity')
+            unit = ingredient.get('unit')
+
+            # Validate ingredient fields
+            if not ingredient_name or not quantity or not unit:
+                return jsonify({"message": "Bad Request", "errors": {"Ingredient Error": "Each ingredient requires a name, quantity, and unit"}}), 400
+
+            new_ingredient = RecipeIngredient(
+                recipe_id=new_recipe.id,
+                ingredient_name=ingredient_name,
+                quantity=quantity,
+                unit=unit
+            )
+            db.session.add(new_ingredient)
+
+        # Commit the ingredients
+        db.session.commit()
+
+        return jsonify(new_recipe.to_dict()), 201
+
+    except Exception as e:
+        db.session.rollback()  # Rollback on error
+        print(f"Error creating recipe: {e}")  # Log the error for debugging
+        return jsonify({"message": "Internal Server Error"}), 500
 # Get a specific recipe by ID
 @recipe_routes.route('/<int:id>', methods=['GET'])
 def get_recipe(id):
@@ -54,10 +96,14 @@ def get_recipe(id):
     if not recipe:
         return jsonify({"message": "Recipe couldn't be found"}), 404
 
-    return jsonify(recipe.to_dict()), 200
+    recipe_data = recipe.to_dict()
+    recipe_data['author'] = recipe.user.username
+
+    return jsonify(recipe_data), 200
 
 # Simplified route to get recipes by type
-@recipe_routes.route('/<recipe_type>', methods=['GET'])
+# Get recipes by type
+@recipe_routes.route('/type/<recipe_type>', methods=['GET'])
 def get_recipes_by_type(recipe_type):
     # Convert the string parameter to lowercase
     recipe_type_lower = recipe_type.lower()

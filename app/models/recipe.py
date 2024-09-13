@@ -25,8 +25,11 @@ class Recipe(db.Model):
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     ratings = db.Column(db.Float, nullable=True, default=0.0)  # Average rating
     type = db.Column(db.Enum(RecipeType), nullable=False)  # Type of the recipe (e.g., snack, entree, etc.)
+    cook_time = db.Column(db.Integer, nullable=True)  # Time in minutes
+    prep_time = db.Column(db.Integer, nullable=True)  # Time in minutes
     # Relationship with RecipeIngredient
     ingredients = db.relationship('RecipeIngredient', backref='recipe', lazy=True, cascade="all, delete-orphan")
+    user = db.relationship('User', backref='recipes')
 
     def to_dict(self):
         return {
@@ -40,6 +43,8 @@ class Recipe(db.Model):
             'ingredients': [ingredient.to_dict() for ingredient in self.ingredients],
             'ratings': self.ratings,  # Include ratings
             'type': self.type.value,  # Get the string value of the enum
+            'cook_time': self.cook_time,
+            'prep_time': self.prep_time,
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }
