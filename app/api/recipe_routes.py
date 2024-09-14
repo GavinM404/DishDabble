@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
-from app.models import db, Recipe, RecipeType, RecipeIngredient
+from app.models import db, Recipe, RecipeType, RecipeIngredient, Review
 from datetime import datetime, timezone
 
 recipe_routes = Blueprint('recipes', __name__)
@@ -121,7 +121,7 @@ def get_recipes_by_type(recipe_type):
         return jsonify({"message": "No recipes found for the given type"}), 404
 
     # Serialize the recipes into a list of dictionaries
-    recipes_list = [{"id": r.id, "name": r.name, "description": r.description, "type": r.type.value, "rating": r.ratings} for r in recipes]
+    recipes_list = [{"id": r.id, "name": r.name, "description": r.description, "type": r.type.value} for r in recipes]
 
     return jsonify({"recipes": recipes_list}), 200
 
@@ -187,3 +187,15 @@ def get_personal_recipes():
     """
     personal_recipes = Recipe.query.filter_by(user_id=current_user.id).all()
     return jsonify({"Recipes": [recipe.to_dict() for recipe in personal_recipes]}), 200
+
+@recipe_routes.route('/<int:id>/reviews', methods=['GET'])
+def get_reviews(id):
+    """
+    Get all reviews for a recipe.
+    """
+    reviews = Review.query.filter_by(recipe_id=id).all()
+
+    if not reviews:
+        return jsonify({"message": "No reviews found for this recipe"}), 404
+
+    return jsonify({"Reviews": [review.to_dict() for review in reviews]}), 200

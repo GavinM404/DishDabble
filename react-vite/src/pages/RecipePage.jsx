@@ -1,15 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import { fetchRecipeDetails } from "../redux/recipes";
+import { getReviews } from "../redux/reviews";
+import Reviews from "../components/Reviews/Reviews";
 
 function RecipePage() {
   const dispatch = useDispatch();
   const { recipeId } = useParams();
   const recipe = useSelector(state => state.recipes.currentRecipe);
+  const reviews = useSelector(state => state.reviews?.reviews ? Object.values(state.reviews.reviews) : []);
+  console.log("Reviews from Redux:", reviews);
+  const currentUser = useSelector((state) => state.session.user);
+  const [userHasReviewed, setUserHasReviewed] = useState(false);
 
   useEffect(() => {
     dispatch(fetchRecipeDetails(recipeId));
+    dispatch(getReviews(recipeId)); // Fetch reviews for the recipe
   }, [dispatch, recipeId]);
 
   if (!recipe) return <div>Loading...</div>;
@@ -37,7 +44,7 @@ function RecipePage() {
         <div className="time-info">
           <div><strong>Prep Time:</strong> {recipe.prep_time || 'N/A'} min</div>
           <div><strong>Cook Time:</strong> {recipe.cook_time || 'N/A'} min</div>
-          <div><strong>Total Time:</strong> { (recipe.prep_time || 0) + (recipe.cook_time || 0) } min</div>
+          <div><strong>Total Time:</strong> {(recipe.prep_time || 0) + (recipe.cook_time || 0)} min</div>
         </div>
       </div>
 
@@ -94,6 +101,12 @@ function RecipePage() {
           {/* Include other nutrition data */}
         </div>
       </div>
+
+      <Reviews
+        currentUser={currentUser}
+        recipeOwnerId={recipe.user_id}
+        reviews={reviews} // Pass reviews to Reviews component
+      />
     </div>
   );
 }

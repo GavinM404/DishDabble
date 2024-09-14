@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
+    reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')
 
     @property
     def password(self):
