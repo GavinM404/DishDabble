@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
 import { deleteReview } from '../../redux/reviews';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 
 const Reviews = ({ currentUser, recipeOwnerId, reviews }) => {
-    console.log("Reviews Component Props:", { currentUser, recipeOwnerId, reviews });
     const { setModalContent } = useModal();
     const dispatch = useDispatch();
     const reviewToDeleteRef = useRef(null);

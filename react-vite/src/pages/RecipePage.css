@@ -10,7 +10,33 @@
 
 .recipe-header, .recipe-content, .time-info {
   grid-column: 1 / 2;
+  justify-content: space-between;
 }
+
+.time-info {
+  border-bottom: thin solid #cc5500;
+  border-top: thin solid #cc5500;
+  padding: 3%;
+}
+.prep {
+  border-right: thin solid #cc5500;
+  padding: 1%;
+}
+
+.cook {
+  border-right: thin solid #cc5500;
+  padding: 1%;
+}
+
+.total {
+  padding: 1%;
+}
+.rating-meal-plan-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
 .recipe-sidebar {
   grid-column: 2 / 3;
@@ -26,17 +52,24 @@
   border-radius: 10px;
 }
 
-.rating-meal-plan-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .meal-plan button {
   padding: 10px 20px;
   background-color: rgb(250, 166, 8);
-  color: white;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.button-stars {
+  display: flex;
+  align-items: center; /* Ensures vertical alignment */
+}
+
+.button-stars button {
+  margin-right: auto; /* Pushes the button to the left */
+}
+
+.button-stars .stars {
+  margin-left: auto; /* Pushes the star rating to the right */
 }

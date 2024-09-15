@@ -4,6 +4,9 @@ import { useParams } from "react-router-dom";
 import { fetchRecipeDetails } from "../redux/recipes";
 import { getReviews } from "../redux/reviews";
 import Reviews from "../components/Reviews/Reviews";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import "./RecipePage.css";
 
 function RecipePage() {
@@ -66,6 +69,19 @@ const renderIngredients = () => {
           reviews.reduce((acc, review) => acc + review.stars, 0) / reviewCount
         ).toFixed(1)
       : "New";
+      const renderStars = (stars) => {
+        return (
+            <span className="average-rating-stars">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <FontAwesomeIcon
+                        key={star}
+                        icon={star <= stars ? solidStar : regularStar}
+                        className="star-icon"
+                    />
+                ))}
+            </span>
+        );
+    };
 
   return (
     <div className="recipe-page">
@@ -77,13 +93,13 @@ const renderIngredients = () => {
         <p>{recipe.description || "No description available."}</p>
 
       <div className="time-info">
-        <span>
+        <span className="prep">
           <strong>Prep Time:</strong> {recipe.prep_time || "N/A"} min
         </span>
-        <span>
+        <span className="cook">
           <strong>Cook Time:</strong> {recipe.cook_time || "N/A"} min
         </span>
-        <span>
+        <span className="total">
           <strong>Total Time:</strong>{" "}
           {(recipe.prep_time || 0) + (recipe.cook_time || 0)} min
         </span>
@@ -116,11 +132,8 @@ const renderIngredients = () => {
 
         <div className="rating-meal-plan-container">
             <div className="rating">
-                <strong>Rating:</strong> {averageRating || "N/A"} from {reviewCount}{" "}
-                {reviewCount === 1 ? "Review" : "Reviews"}
-            </div>
-            <div className="meal-plan">
-                <button>Meal Plan</button>
+                <div className="button-stars"><button>Meal Plan</button><div className="stars">{renderStars(Math.round(averageRating))}</div></div>
+                <div className="actual-ratings"><strong>Rating: </strong>{averageRating || "N/A"} from {reviewCount}{" "}{reviewCount === 1 ? "Review" : "Reviews"}</div>
             </div>
         </div>
 

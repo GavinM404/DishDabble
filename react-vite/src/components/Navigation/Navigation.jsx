@@ -10,7 +10,7 @@ function Navigation() {
     <ul className="nav-container">
       <li>
         <NavLink to="/" className="active-link">
-          Home
+          <img src="/DishDabble1.png" alt="DishDabble" className="logo" />
         </NavLink>
       </li>
       {user && (

@@ -36,10 +36,6 @@ a:hover {
   color: #ffb84d; /* Slightly lighter orange on hover */
 }
 
-.active-link {
-  border-bottom: 2px solid #fff; /* Underline for active link */
-}
-
 button {
   background-color: #ffb84d; /* Lighter orange */
   color: #fff;
@@ -80,4 +76,10 @@ button:hover {
 
 .profile-dropdown li button:hover {
   color: #ffb84d;
+}
+
+.logo {
+  max-height: 50px; /* Control the height of the logo */
+  width: auto; /* Adjust the width based on height */
+  object-fit: contain; /* Ensure the image fits without distortion */
 }
