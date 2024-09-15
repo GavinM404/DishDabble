@@ -44,17 +44,7 @@ const Reviews = ({ currentUser, recipeOwnerId, reviews }) => {
     return (
         <div className='reviews'>
             <div className='reviews-heading'>
-                <h2>
-                    <span className='rating'>{averageRating}</span>
-                    {reviewCount > 0 && (
-                        <>
-                            <span className='dot'>·</span>
-                            <span className='review-count'>
-                                {reviewCount} {reviewCount === 1 ? 'Review' : 'Reviews'}
-                            </span>
-                        </>
-                    )}
-                </h2>
+            <h2>Reviews</h2>
             </div>
 
             <div className='reviews-list'>
@@ -65,7 +55,7 @@ const Reviews = ({ currentUser, recipeOwnerId, reviews }) => {
                 ) : (
                     reviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(review => (
                         <div key={review.id} className='review'>
-                            <h3>User {review.user_id}</h3>
+                            <h3>{review.username}</h3>
                             <p>{new Date(review.created_at).toLocaleString('default', { month: 'long', year: 'numeric' })}</p>
                             <p>{review.content}</p>
                             {currentUser && currentUser.id === review.user_id && (

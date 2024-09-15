@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRecipesType } from "../redux/recipes";
 import Card from "../components/Card/Card";
 import { useParams } from "react-router-dom";
+import './RecipeTypePage.css'
 
 const RecipeTypePage = () => {
     const { recipeType } = useParams();
@@ -15,10 +16,8 @@ const RecipeTypePage = () => {
         }
     }, [dispatch, recipeType]);
 
-    // Handle undefined recipeType or provide a default
     const formattedRecipeType = recipeType ? recipeType.charAt(0).toUpperCase() + recipeType.slice(1) : 'Recipes';
 
-    // Convert allRecipes object to an array for mapping
     const recipesArray = Object.values(allRecipes);
 
     return (
@@ -31,8 +30,8 @@ const RecipeTypePage = () => {
                             key={recipe.id}
                             id={recipe.id}
                             name={recipe.name}
-                            src={recipe.image} // Ensure the recipe object has an 'image' property
-                            rating={recipe.rating} // Ensure recipe has a 'rating' property
+                            src={recipe.image}
+                            rating={recipe.rating}
                         />
                     ))
                 ) : (

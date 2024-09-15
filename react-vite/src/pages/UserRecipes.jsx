@@ -29,16 +29,15 @@ function UserRecipes() {
   };
 
   const handleConfirmDelete = async (recipeId) => {
-    await dispatch(deleteRecipe(recipeId)); // Delete the recipe
-    setRecipeToDelete(null); // Close the modal
-    await dispatch(fetchUserRecipes()); // Fetch user recipes again to update the list
+    await dispatch(deleteRecipe(recipeId));
+    setRecipeToDelete(null);
+    await dispatch(fetchUserRecipes());
   };
 
   const handleUpdate = (recipeId) => {
     navigate(`/recipes/${recipeId}/edit`);
   };
 
-  // Convert the allRecipes object to an array for easier mapping
   const userRecipes = Object.values(allRecipes);
 
   if (userRecipes.length === 0) {
@@ -72,8 +71,8 @@ function UserRecipes() {
               key={recipe.id}
               id={recipe.id}
               name={recipe.name}
-              src={recipe.image} // Ensure the recipe object has an 'image' property
-              rating={recipe.rating} // Ensure recipe has a 'rating' property
+              src={recipe.image}
+              rating={recipe.rating}
             />
             <div className="recipe-actions">
               <button onClick={() => handleUpdate(recipe.id)}>Update</button>

@@ -18,6 +18,7 @@ class Recipe(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
     instructions = db.Column(db.Text, nullable=False)
+    image_url = db.Column(db.String, nullable=True)
     nutritional_info = db.Column(db.JSON, nullable=True)
     cuisine = db.Column(db.String, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
@@ -26,7 +27,7 @@ class Recipe(db.Model):
     type = db.Column(db.Enum(RecipeType), nullable=False)  # Type of the recipe (e.g., snack, entree, etc.)
     cook_time = db.Column(db.Integer, nullable=True)  # Time in minutes
     prep_time = db.Column(db.Integer, nullable=True)  # Time in minutes
-    
+
     # Relationship with RecipeIngredient
     ingredients = db.relationship('RecipeIngredient', backref='recipe', lazy=True, cascade="all, delete-orphan")
     user = db.relationship('User', backref='recipes')
@@ -38,6 +39,7 @@ class Recipe(db.Model):
             'name': self.name,
             'description': self.description,
             'instructions': self.instructions,
+            'image_url': self.image_url,
             'nutritional_info': self.nutritional_info,
             'cuisine': self.cuisine,
             'user_id': self.user_id,

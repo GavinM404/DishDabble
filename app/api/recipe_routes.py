@@ -121,7 +121,7 @@ def get_recipes_by_type(recipe_type):
         return jsonify({"message": "No recipes found for the given type"}), 404
 
     # Serialize the recipes into a list of dictionaries
-    recipes_list = [{"id": r.id, "name": r.name, "description": r.description, "type": r.type.value} for r in recipes]
+    recipes_list = [{"id": r.id, "name": r.name, "description": r.description, "type": r.type.value, "image": r.image_url } for r in recipes]
 
     return jsonify({"recipes": recipes_list}), 200
 
