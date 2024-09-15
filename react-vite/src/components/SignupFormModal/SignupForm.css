@@ -1,0 +1,25 @@
+.signup-box {
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    text-align: center; /* Center align text */
+}
+
+.signup-box input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.signup-box button {
+    padding: 10px 20px;
+    color: white;
+}
+
+.signup-box button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

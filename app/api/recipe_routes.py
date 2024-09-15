@@ -36,6 +36,7 @@ def create_recipe():
     # Additional fields
     nutritional_info = data.get('nutritional_info')
     cuisine = data.get('cuisine')
+    image_url = data.get('image_url')
 
     # Check for required fields
     if not name or not instructions or not type or not ingredients:
@@ -52,7 +53,8 @@ def create_recipe():
             cuisine=cuisine,
             type=RecipeType(type),  # Convert type to RecipeType Enum
             cook_time=cook_time,
-            prep_time=prep_time
+            prep_time=prep_time,
+            image_url=image_url
         )
 
         # Add and commit the new recipe to get an ID for it
@@ -188,6 +190,7 @@ def get_personal_recipes():
     personal_recipes = Recipe.query.filter_by(user_id=current_user.id).all()
     return jsonify({"Recipes": [recipe.to_dict() for recipe in personal_recipes]}), 200
 
+
 @recipe_routes.route('/<int:id>/reviews', methods=['GET'])
 def get_reviews(id):
     """
@@ -199,3 +202,36 @@ def get_reviews(id):
         return jsonify({"message": "No reviews found for this recipe"}), 404
 
     return jsonify({"Reviews": [review.to_dict() for review in reviews]}), 200
+
+@recipe_routes.route('/<int:id>/reviews', methods=['POST'])
+@login_required
+def create_review(id):
+    """
+    Create a review for a specific recipe.
+    """
+    data = request.get_json()
+
+    content = data.get('content')
+    stars = data.get('stars')
+
+    if not stars or not (1 <= stars <= 5):
+        return jsonify({"message": "Bad Request", "errors": {"Stars": "Stars must be between 1 and 5."}}), 400
+
+    try:
+        # Create the new review
+        new_review = Review(
+            user_id=current_user.id,
+            recipe_id=id,  # Use recipe ID from the route
+            content=content,
+            stars=stars
+        )
+
+        db.session.add(new_review)
+        db.session.commit()
+
+        return jsonify(new_review.to_dict()), 201
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating review: {e}")
+        return jsonify({"message": "Internal Server Error"}), 500

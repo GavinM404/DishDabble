@@ -71,7 +71,7 @@ function UserRecipes() {
               key={recipe.id}
               id={recipe.id}
               name={recipe.name}
-              src={recipe.image}
+              src={recipe.image_url}
               rating={recipe.rating}
             />
             <div className="recipe-actions">

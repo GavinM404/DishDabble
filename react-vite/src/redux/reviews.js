@@ -2,6 +2,12 @@ const GET_REVIEWS = "reviews/getReviews";
 const CLEAR_REVIEWS = "reviews/clearReviews";
 const POST_REVIEW = "reviews/postReview";
 const DELETE_REVIEW = "reviews/deleteReview";
+const UPDATE_REVIEW = "reviews/updateReview";
+
+const updateReviewsAction = (review) => ({
+  type: UPDATE_REVIEW,
+  payload: review,
+});
 
 const getReviewsAction = (reviews) => ({
   type: GET_REVIEWS,
@@ -23,7 +29,7 @@ const deleteReviewAction = (reviewId) => ({
 });
 
 export const getReviews = (recipeId) => async (dispatch) => {
-  //dispatch(clearReviewsAction());
+  dispatch(clearReviewsAction());
   const res = await fetch(`/api/recipes/${recipeId}/reviews`);
 
   if (res.ok) {
@@ -44,6 +50,22 @@ export const createReview = (payload) => async (dispatch) => {
   if (res.ok) {
     const review = await res.json();
     dispatch(postReviewAction(review));
+  }
+};
+
+export const updateReview = (payload) => async (dispatch) => {
+  const res = await fetch(`/api/reviews/${payload.id}`, {
+    // Updated to use the correct route for update
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (res.ok) {
+    const review = await res.json();
+    dispatch(updateReviewsAction(review));
   }
 };
 
@@ -77,6 +99,16 @@ const reviewsReducer = (state = initialState, action) => {
       return {
         ...state,
         reviews: {},
+      };
+    }
+    case UPDATE_REVIEW: {
+      const updatedReview = action.payload;
+      return {
+        ...state,
+        reviews: {
+          ...state.reviews,
+          [updatedReview.id]: updatedReview,
+        },
       };
     }
     case POST_REVIEW: {

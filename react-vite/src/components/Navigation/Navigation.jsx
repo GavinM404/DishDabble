@@ -15,8 +15,8 @@ function Navigation() {
       </li>
       {user && (
         <li>
-          <NavLink to="/recipes/new" className="active-link">
-            Create New Recipe
+          <NavLink to="/recipes/personal" className="active-link">
+            <button className="my-recipes">My Recipes</button>
           </NavLink>
         </li>
       )}
