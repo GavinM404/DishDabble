@@ -63,39 +63,39 @@
 
 .button-stars {
   display: flex;
-  align-items: center; /* Ensures vertical alignment */
+  align-items: center;
 }
 
 .button-stars button {
-  margin-right: auto; /* Pushes the button to the left */
+  margin-right: auto;
 }
 
 .button-stars .stars {
-  margin-left: auto; /* Pushes the star rating to the right */
+  margin-left: auto;
 }
 
-/* Style for the Write/Update Review button */
+
 .write-review-button {
   background-color: rgb(250, 166, 8);
-  color: white; /* Button text color */
-  padding: 10px 20px; /* Button padding */
-  font-size: 16px; /* Font size for the button */
-  border: none; /* No border */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin-top: 20px; /* Spacing from the top */
-  transition: background-color 0.3s ease; /* Smooth background color transition */
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
-/* Button hover effect */
+
 .write-review-button:hover {
   background-color: #a75605;
 }
 
-/* Optional: Adjust button width and alignment */
+
 .write-review-button {
-  width: auto; /* Auto width */
-  max-width: 200px; /* Optional max-width for the button */
+  width: auto;
+  max-width: 200px; 
 }
 .review-form-container {
   grid-column: 2 / 3;

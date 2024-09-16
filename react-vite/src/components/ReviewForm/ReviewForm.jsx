@@ -37,16 +37,16 @@ const ReviewForm = ({ recipeId, existingReview = null, onSubmit }) => {
           stars: rating,
           content: reviewText,
           recipeId,
-          id: existingReview ? existingReview.id : null, // Pass the review ID if it exists
+          id: existingReview ? existingReview.id : null,
         };
 
         if (existingReview) {
-          await dispatch(updateReview(reviewData)); // Update review
+          await dispatch(updateReview(reviewData));
         } else {
-          await dispatch(createReview(reviewData)); // Create review
+          await dispatch(createReview(reviewData));
         }
 
-        onSubmit(); // Callback to handle closing form or refreshing the state
+        onSubmit();
       };
 
     const handleStarClick = (selectedRating) => {

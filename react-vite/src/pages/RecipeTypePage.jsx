@@ -31,7 +31,6 @@ const RecipeTypePage = () => {
                             id={recipe.id}
                             name={recipe.name}
                             src={recipe.image}
-                            rating={recipe.rating}
                         />
                     ))
                 ) : (

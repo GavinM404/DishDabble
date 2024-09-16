@@ -13,29 +13,106 @@ const CreateRecipeForm = () => {
   const [instructions, setInstructions] = useState([""]);
   const [imageUrl, setImageUrl] = useState("");
   const [ingredients, setIngredients] = useState([
-    { ingredient_name: "", quantity: "", unit: "" }
+    { ingredient_name: "", quantity: "", unit: "" },
   ]);
   const [type, setType] = useState("");
   const [cookTime, setCookTime] = useState("");
   const [prepTime, setPrepTime] = useState("");
-  const [nutritionalInfo, setNutritionalInfo] = useState("{}");
+  const [notes, setNotes] = useState([""]);
+
+
+  const [calories, setCalories] = useState("");
+  const [protein, setProtein] = useState("");
+  const [fat, setFat] = useState("");
+  const [carbohydrates, setCarbohydrates] = useState("");
+
   const [cuisine, setCuisine] = useState("");
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     const errors = {};
-    if (!name.trim()) errors.name = "Name is required.";
-    if (instructions.every(instr => !instr.trim())) errors.instructions = "At least one instruction is required.";
-    if (!type) errors.type = "Type is required.";
-    if (!cookTime) errors.cookTime = "Cook time is required.";
-    if (!prepTime) errors.prepTime = "Prep time is required.";
-    if (ingredients.some(ing => !ing.ingredient_name || !ing.quantity || !ing.unit))
-      errors.ingredients = "All ingredients must include name, quantity, and unit.";
-    try {
-      JSON.parse(nutritionalInfo);
-    } catch {
-      errors.nutritionalInfo = "Nutritional information must be valid JSON.";
+
+
+    if (!name.trim()) {
+      errors.name = "Name is required.";
+    } else if (name.length > 24) {
+      errors.name = "Name cannot exceed 24 characters.";
     }
+
+    if (!description.trim()) {
+      errors.description = "Description is required.";
+    } else if (description.length > 150) {
+      errors.description = "Description cannot exceed 150 characters.";
+    }
+
+
+    if (instructions.every((instr) => !instr.trim())) {
+      errors.instructions = "At least one instruction is required.";
+    }
+
+
+    if (!type) {
+      errors.type = "Type is required.";
+    }
+
+    if (!cookTime) {
+      errors.cookTime = "Cook time is required.";
+    } else if (isNaN(cookTime)) {
+      errors.cookTime = "Cook time must be a number.";
+    }
+
+    if (!prepTime) {
+      errors.prepTime = "Prep time is required.";
+    } else if (isNaN(prepTime)) {
+      errors.prepTime = "Prep time must be a number.";
+    }
+
+    ingredients.forEach((ingredient, index) => {
+      if (
+        !ingredient.ingredient_name ||
+        ingredient.ingredient_name.length > 11
+      ) {
+        errors.ingredients = `Ingredient name must be provided and cannot exceed 11 characters (Ingredient ${
+          index + 1
+        }).`;
+      }
+      if (!ingredient.quantity || isNaN(ingredient.quantity)) {
+        errors.ingredients = `Ingredient quantity must be a number (Ingredient ${
+          index + 1
+        }).`;
+      }
+      if (!ingredient.unit || ingredient.unit.length > 11) {
+        errors.ingredients = `Ingredient unit cannot exceed 11 characters (Ingredient ${
+          index + 1
+        }).`;
+      }
+    });
+
+    if (calories) {
+      if (isNaN(calories) || calories > 9999) {
+        errors.calories = "Calories must be a number and no more than 9999.";
+      }
+    }
+
+    if (protein) {
+      if (isNaN(protein) || protein > 9999) {
+        errors.protein = "Protein must be a number and no more than 9999.";
+      }
+    }
+
+    if (fat) {
+      if (isNaN(fat) || fat > 9999) {
+        errors.fat = "Fat must be a number and no more than 9999.";
+      }
+    }
+
+    if (carbohydrates) {
+      if (isNaN(carbohydrates) || carbohydrates > 9999) {
+        errors.carbohydrates =
+          "Carbohydrates must be a number and no more than 9999.";
+      }
+    }
+
     return errors;
   };
 
@@ -54,7 +131,13 @@ const CreateRecipeForm = () => {
         type,
         cook_time: cookTime,
         prep_time: prepTime,
-        nutritional_info: JSON.parse(nutritionalInfo),
+        notes: notes,
+        nutritional_info: {
+          calories,
+          protein,
+          fat,
+          carbohydrates,
+        },
         cuisine,
         image_url: imageUrl,
       };
@@ -79,7 +162,7 @@ const CreateRecipeForm = () => {
   const addIngredient = () => {
     setIngredients([
       ...ingredients,
-      { ingredient_name: "", quantity: "", unit: "" }
+      { ingredient_name: "", quantity: "", unit: "" },
     ]);
   };
 
@@ -133,38 +216,6 @@ const CreateRecipeForm = () => {
       </div>
 
       <div className="form-section">
-        <label>Image URL</label>
-        <input
-          type="text"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-          placeholder="http://example.com/image.jpg"
-        />
-        {errors.imageUrl && <p className="error">{errors.imageUrl}</p>}
-      </div>
-
-      <div className="form-section">
-        <label>Instructions</label>
-        {instructions.map((instruction, index) => (
-          <div key={index} className="instruction">
-            <textarea
-              value={instruction}
-              onChange={(e) => handleInstructionChange(index, e.target.value)}
-              placeholder="Instruction step"
-            />
-            {index > 0 && (
-              <button type="button" onClick={() => removeInstruction(index)}>
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button type="button" onClick={addInstruction}>
-          Add Instruction
-        </button>
-      </div>
-
-      <div className="form-section">
         <label>Type</label>
         <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">Select recipe type</option>
@@ -176,30 +227,36 @@ const CreateRecipeForm = () => {
         {errors.type && <p className="error">{errors.type}</p>}
       </div>
 
+
       <div className="form-section">
-        <label>Cook Time (minutes)</label>
+        <label>
+          Image URL <span>(Optional)</span>
+        </label>
         <input
-          type="number"
-          value={cookTime}
-          onChange={(e) => setCookTime(e.target.value)}
-          placeholder="Cook time in minutes"
+          type="text"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+          placeholder="http://example.com/image.jpg"
         />
-        {errors.cookTime && <p className="error">{errors.cookTime}</p>}
+        {errors.imageUrl && <p className="error">{errors.imageUrl}</p>}
       </div>
 
       <div className="form-section">
-        <label>Prep Time (minutes)</label>
-        <input
-          type="number"
-          value={prepTime}
-          onChange={(e) => setPrepTime(e.target.value)}
-          placeholder="Prep time in minutes"
+        <label>
+          Notes <span>(Optional)</span>
+        </label>
+        <textarea
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Recipe notes"
         />
-        {errors.prepTime && <p className="error">{errors.prepTime}</p>}
+        {errors.notes && <p className="error">{errors.notes}</p>}
       </div>
 
       <div className="form-section">
-        <label>Cuisine</label>
+        <label>
+          Cuisine <span>(Optional)</span>
+        </label>
         <input
           type="text"
           value={cuisine}
@@ -208,22 +265,8 @@ const CreateRecipeForm = () => {
         />
         {errors.cuisine && <p className="error">{errors.cuisine}</p>}
       </div>
-
+      <h3>Ingredients</h3>
       <div className="form-section">
-        <label>Nutritional Info</label>
-        <input
-          type="text"
-          value={nutritionalInfo}
-          onChange={(e) =>
-            setNutritionalInfo(JSON.parse(e.target.value) || {})
-          }
-          placeholder='{"calories": 200, "protein": 5, "fat": 7, "carbohydrates": 30}'
-        />
-        {errors.nutritionalInfo && <p className="error">{errors.nutritionalInfo}</p>}
-      </div>
-
-      <div className="form-section">
-        <label>Ingredients</label>
         {ingredients.map((ingredient, index) => (
           <div key={index} className="ingredient">
             <input
@@ -260,6 +303,96 @@ const CreateRecipeForm = () => {
         <button type="button" onClick={addIngredient}>
           Add Ingredient
         </button>
+      </div>
+      <h3>Instructions</h3>
+      <div className="form-section">
+        <label>Cook Time (minutes)</label>
+        <input
+          type="number"
+          value={cookTime}
+          onChange={(e) => setCookTime(e.target.value)}
+          placeholder="Cook time in minutes"
+        />
+        {errors.cookTime && <p className="error">{errors.cookTime}</p>}
+      </div>
+
+      <div className="form-section">
+        <label>Prep Time (minutes)</label>
+        <input
+          type="number"
+          value={prepTime}
+          onChange={(e) => setPrepTime(e.target.value)}
+          placeholder="Prep time in minutes"
+        />
+        {errors.prepTime && <p className="error">{errors.prepTime}</p>}
+      </div>
+      <div className="form-section">
+        <label>Steps <span>(Each step is automatically numbered)</span></label>
+        {instructions.map((instruction, index) => (
+          <div key={index} className="instruction">
+            <textarea
+              value={instruction}
+              onChange={(e) => handleInstructionChange(index, e.target.value)}
+              placeholder="Instruction step"
+            />
+            {index > 0 && (
+              <button type="button" onClick={() => removeInstruction(index)}>
+                Remove
+              </button>
+            )}
+          </div>
+        ))}
+        <button type="button" onClick={addInstruction}>
+          Add Instruction
+        </button>
+      </div>
+
+      <h3>Nutritional Information</h3>
+      <p>All nutritional information is optional</p>
+      <div className="form-section">
+        <label>Calories</label>
+        <input
+          type="number"
+          value={calories}
+          onChange={(e) => setCalories(e.target.value)}
+          placeholder="Calories"
+        />
+        {errors.calories && <p className="error">{errors.calories}</p>}
+      </div>
+
+      <div className="form-section">
+        <label>Protein (grams)</label>
+        <input
+          type="number"
+          value={protein}
+          onChange={(e) => setProtein(e.target.value)}
+          placeholder="Protein"
+        />
+        {errors.protein && <p className="error">{errors.protein}</p>}
+      </div>
+
+      <div className="form-section">
+        <label>Fat (grams)</label>
+        <input
+          type="number"
+          value={fat}
+          onChange={(e) => setFat(e.target.value)}
+          placeholder="Fat"
+        />
+        {errors.fat && <p className="error">{errors.fat}</p>}
+      </div>
+
+      <div className="form-section">
+        <label>Carbohydrates (grams)</label>
+        <input
+          type="number"
+          value={carbohydrates}
+          onChange={(e) => setCarbohydrates(e.target.value)}
+          placeholder="Carbohydrates"
+        />
+        {errors.carbohydrates && (
+          <p className="error">{errors.carbohydrates}</p>
+        )}
       </div>
 
       <button type="submit">Create Recipe</button>

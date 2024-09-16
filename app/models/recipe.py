@@ -27,6 +27,7 @@ class Recipe(db.Model):
     type = db.Column(db.Enum(RecipeType), nullable=False)  # Type of the recipe (e.g., snack, entree, etc.)
     cook_time = db.Column(db.Integer, nullable=True)  # Time in minutes
     prep_time = db.Column(db.Integer, nullable=True)  # Time in minutes
+    notes = db.Column(db.String, nullable=True)
 
     # Relationship with RecipeIngredient
     ingredients = db.relationship('RecipeIngredient', backref='recipe', lazy=True, cascade="all, delete-orphan")
@@ -47,6 +48,7 @@ class Recipe(db.Model):
             'type': self.type.value,  # Get the string value of the enum
             'cook_time': self.cook_time,
             'prep_time': self.prep_time,
+            'notes': self.notes,
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }

@@ -5,6 +5,7 @@ import Card from "../components/Card/Card";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal/DeleteConfirmationModal";
 import { useModal } from "../context/Modal";
 import { fetchUserRecipes, deleteRecipe } from "../redux/recipes";
+import "./UserRecipes.css"
 
 function UserRecipes() {
   const navigate = useNavigate();
@@ -72,7 +73,6 @@ function UserRecipes() {
               id={recipe.id}
               name={recipe.name}
               src={recipe.image_url}
-              rating={recipe.rating}
             />
             <div className="recipe-actions">
               <button onClick={() => handleUpdate(recipe.id)}>Update</button>

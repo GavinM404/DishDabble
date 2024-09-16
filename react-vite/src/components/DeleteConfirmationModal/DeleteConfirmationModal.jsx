@@ -1,4 +1,5 @@
 import { useModal } from '../../context/Modal';
+import './DeleteConfirmationModal.css'
 
 const DeleteConfirmationModal = ({ thing, onDelete, onCancel }) => {
   const { setModalContent } = useModal();

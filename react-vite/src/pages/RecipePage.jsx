@@ -8,6 +8,7 @@ import ReviewForm from "../components/ReviewForm/ReviewForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
+import { useModal } from "../context/Modal";
 import "./RecipePage.css";
 
 function RecipePage() {
@@ -19,7 +20,8 @@ function RecipePage() {
   );
   const currentUser = useSelector((state) => state.session.user);
 
-  const [showReviewForm, setShowReviewForm] = useState(false); // Controls review form visibility
+  const { setModalContent } = useModal();
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
   useEffect(() => {
     dispatch(fetchRecipeDetails(recipeId));
@@ -32,7 +34,11 @@ function RecipePage() {
 
   const handleReviewSubmit = () => {
     setShowReviewForm(false);
-    dispatch(getReviews(recipeId)); // Refresh reviews after submission or update
+    dispatch(getReviews(recipeId));
+  };
+
+  const handleMealPlanClick = () => {
+    setModalContent(<div style={{ padding: '20px', fontSize: '18px' }}>Coming Soon</div>);
   };
 
   const reviewCount = reviews.length;
@@ -107,34 +113,24 @@ function RecipePage() {
 
         <div className="notes">
           <h2>Notes:</h2>
+          {recipe.notes || ""}
         </div>
 
-      {/* Show Review Form if User hasn't reviewed or wants to update their review */}
-      {!userReview && currentUser && currentUser.id !== recipe.user_id && (
-  <button
-    className="write-review-button"
-    onClick={() => setShowReviewForm(true)}
-  >
-    Write a Review
-  </button>
-)}
+        {!userReview && currentUser && currentUser.id !== recipe.user_id && (
+          <button
+            className="write-review-button"
+            onClick={() => setShowReviewForm(true)}
+          >
+            Write a Review
+          </button>
+        )}
 
-{userReview && (
-  <button
-    className="write-review-button"
-    onClick={() => setShowReviewForm(true)}
-  >
-    Update Review
-  </button>
-)}
-
-      {showReviewForm && (
-        <ReviewForm
-          recipeId={recipeId}
-          existingReview={userReview}
-          onSubmit={handleReviewSubmit}
-        />
-      )}
+        {showReviewForm && !userReview && (
+          <ReviewForm
+            recipeId={recipeId}
+            onSubmit={handleReviewSubmit}
+          />
+        )}
 
       <Reviews
         currentUser={currentUser}
@@ -155,7 +151,7 @@ function RecipePage() {
         <div className="rating-meal-plan-container">
           <div className="rating">
             <div className="button-stars">
-              <button>Meal Plan</button>
+              <button onClick={handleMealPlanClick}>Meal Plan</button>
               <div className="stars">
                 {renderStars(Math.round(averageRating))}
               </div>

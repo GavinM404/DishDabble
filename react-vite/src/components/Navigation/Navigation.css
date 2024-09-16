@@ -33,11 +33,12 @@ a {
 }
 
 a:hover {
-  color: #ffb84d; /* Slightly lighter orange on hover */
+  color: #ffb84d;
+
 }
 
 button {
-  background-color: #ffb84d; /* Lighter orange */
+  background-color: #ffb84d;
   color: #fff;
   padding: 8px 15px;
   border: none;
@@ -46,7 +47,7 @@ button {
 }
 
 button:hover {
-  background-color: #ff8c42; /* Darker orange on hover */
+  background-color: #ff8c42;
 }
 
 .profile-dropdown {
@@ -62,8 +63,9 @@ button:hover {
 
 .profile-dropdown li {
   padding: 10px 0;
-  text-align: left;
+  text-align: center;
   color: #333;
+  cursor: pointer;
 }
 
 .profile-dropdown li button {
@@ -73,13 +75,15 @@ button:hover {
   padding: 0;
   border: none;
 }
-
+.profile-dropdown li:hover{
+  color: #e98f08;
+}
 .profile-dropdown li button:hover {
   color: #ffb84d;
 }
 
 .logo {
-  max-height: 50px; /* Control the height of the logo */
-  width: auto; /* Adjust the width based on height */
-  object-fit: contain; /* Ensure the image fits without distortion */
+  max-height: 50px;
+  width: auto;
+  object-fit: contain;
 }

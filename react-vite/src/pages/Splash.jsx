@@ -4,7 +4,6 @@ import './Splash.css'
 const Splash = () => {
     return (
         <div className='splash-container'>
-            {/* Categories Section */}
             <div className='categories-container'>
                 <div className='category'>
                     <h2>Entrees</h2>

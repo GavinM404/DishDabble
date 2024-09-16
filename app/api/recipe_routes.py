@@ -31,6 +31,7 @@ def create_recipe():
     type = data.get('type')
     cook_time = data.get('cook_time')
     prep_time = data.get('prep_time')
+    notes = data.get('notes')
     user_id = current_user.id
 
     # Additional fields
@@ -54,6 +55,7 @@ def create_recipe():
             type=RecipeType(type),  # Convert type to RecipeType Enum
             cook_time=cook_time,
             prep_time=prep_time,
+            notes=notes,
             image_url=image_url
         )
 
@@ -138,6 +140,7 @@ def update_recipe(id):
 
     if not recipe:
         return jsonify({"message": "Recipe couldn't be found"}), 404
+
     # Ensure only the recipe owner can update it
     if recipe.user_id != current_user.id:
         return jsonify({"message": "Forbidden"}), 403
@@ -145,20 +148,62 @@ def update_recipe(id):
     data = request.get_json()
     name = data.get('name')
     description = data.get('description')
-    ingredients = data.get('ingredients')
+    ingredients_data = data.get('ingredients')
     instructions = data.get('instructions')
+    type = data.get('type')
+    cook_time = data.get('cook_time')
+    prep_time = data.get('prep_time')
+    nutritional_info = data.get('nutritional_info')
+    cuisine = data.get('cuisine')
+    notes = data.get('notes')
+    image_url = data.get('image_url')
 
-    if not name or not ingredients or not instructions:
+    # Validate required fields
+    if not name or not ingredients_data or not instructions:
         return jsonify({"message": "Bad Request", "errors": {"Required Fields": "Name, ingredients, and instructions are required"}}), 400
 
-    recipe.name = name
-    recipe.description = description
-    recipe.ingredients = ingredients
-    recipe.instructions = instructions
+    try:
+        # Update recipe fields
+        recipe.name = name
+        recipe.description = description
+        recipe.instructions = instructions
+        recipe.nutritional_info = nutritional_info
+        recipe.cuisine = cuisine
+        recipe.type = RecipeType(type)
+        recipe.cook_time = cook_time
+        recipe.prep_time = prep_time
+        recipe.notes = notes
+        recipe.image_url = image_url
 
-    db.session.commit()
+        # Clear the current ingredients
+        RecipeIngredient.query.filter_by(recipe_id=recipe.id).delete()
 
-    return jsonify(recipe.to_dict()), 200
+        # Add updated ingredients
+        for ingredient in ingredients_data:
+            ingredient_name = ingredient.get('ingredient_name')
+            quantity = ingredient.get('quantity')
+            unit = ingredient.get('unit')
+
+            if not ingredient_name or not quantity or not unit:
+                return jsonify({"message": "Bad Request", "errors": {"Ingredient Error": "Each ingredient requires a name, quantity, and unit"}}), 400
+
+            new_ingredient = RecipeIngredient(
+                recipe_id=recipe.id,
+                ingredient_name=ingredient_name,
+                quantity=quantity,
+                unit=unit
+            )
+            db.session.add(new_ingredient)
+
+        # Commit all changes
+        db.session.commit()
+
+        return jsonify(recipe.to_dict()), 200
+
+    except Exception as e:
+        db.session.rollback()  # Rollback in case of an error
+        print(f"Error updating recipe: {e}")
+        return jsonify({"message": "Internal Server Error"}), 500
 
 # Delete a recipe by ID
 @recipe_routes.route('/<int:id>', methods=['DELETE'])

@@ -1,0 +1,44 @@
+.update-recipe-form {
+    background-color: #fff5e6;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 50%;
+    margin: auto;
+  }
+  .update-recipe-form h3 {
+    justify-content: center;
+  }
+  .update-recipe-form div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .update-recipe-form label {
+    color: #993d00;
+    margin-bottom: 5px;
+  }
+
+  .update-recipe-form input, .update-recipe-form textarea, .update-recipe-form select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #cc5500;
+  }
+
+  .update-recipe-form button {
+    background-color: #ffb84d;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: auto;
+    align-self: left;
+  }

@@ -1,0 +1,93 @@
+.reviews {
+    padding: 20px;
+    background-color: #fff8f2;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .reviews-heading h2 {
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .reviews-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .review {
+    background-color: #ffe9d6;
+    border: 1px solid #f39c12;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stars-rating {
+    display: flex;
+    align-items: center;
+  }
+
+  .stars {
+    display: inline-block;
+    color: #ff6206;
+    margin-right: 5px;
+  }
+
+  .stars-number {
+    font-size: 14px;
+    color: #ff6206;
+  }
+
+  .star-icon {
+    margin-right: 2px;
+    font-size: 18px;
+  }
+
+  .review-date {
+    color: #a35a1f;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .review-content {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .review-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .delete-review-button,
+  .edit-review-button {
+    background-color: #e67e22;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .delete-review-button:hover,
+  .edit-review-button:hover {
+    background-color: #d35400;
+  }
+
+  .delete-review-button {
+    background-color: #e74c3c;
+  }
+
+  .delete-review-button:hover {
+    background-color: #c0392b;
+  }
